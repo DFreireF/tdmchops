@@ -3,6 +3,9 @@ import matplotlib.pyplot as plt
 import os
 import glob
 import matplotlib.dates as mdates
+from nptdms import TdmsFile
+from iqtools.iqtools.tools import get_iq_object
+import gc
 
 def analyserfile2datetime64(file):
     last_part = file.split('/')[-1].split('-')[-1][:-4]
@@ -18,6 +21,16 @@ def analyserfile2datetime64(file):
     datetime64 = np.datetime64(f"{year:04d}-{month:02d}-{day:02d}T{hour:02d}:{minute:02d}:{second:02d}.{microsecond:06d}")
     return datetime64
 
+def kicker_times(filename, channel=4, fs = 999.99):
+    chan = f'{channel:02}'
+    tdms_file = TdmsFile.read(filename)
+    kicker_channel = tdms_file['SCData'][f'CHANNEL_{chan}'][:]
+    timestamp_channel_0 = tdms_file['SCTimestamps']['TimeStamp'][0]
+
+    jump = np.where(np.diff(kicker_channel) == 1)[0]
+    
+    kicker_times = [timestamp_channel_0 + np.timedelta64(int((index+1)/fs*1e9),'ns') for index in jump]
+    return kicker_times
 
 def convert_date_to_filename(date):
     date_str = str(date)
@@ -96,8 +109,8 @@ def get_iq_files(head = '/lustre/ap/litv-exp/2021-07-03_E143_TwoPhotonDecay_ssan
     iq_files = [head + f for f in filelist]
     return iq_files
 
-def get_kick_time(sc_files, kicker_times):
-    kick_time = np.array([time + np.timedelta64(2,'h')- np.timedelta64(10927123049,'ns') for file in sc_files[-115:-1] for time in kicker_times(file, channel=4, fs = 999.99)])
+def get_kick_time(sc_files):
+    kick_time = np.array([time + np.timedelta64(2,'h')- np.timedelta64(10927123049,'ns') for file in sc_files for time in kicker_times(file, channel=4, fs = 999.99)])
     return kick_time
 
 def get_absolute_time_file_ranges(iq_files):
@@ -107,17 +120,17 @@ def get_absolute_time_file_ranges(iq_files):
     file_ranges = create_dictionary(iq_files, initial_timestamps, final_timestamps)
     return file_ranges
 
-def chop_and_stack(lframes = 2**21, time = 1, fs = 20000000, offset_in_seconds_from_injection = 10, kick_time, file_ranges):
+def chop_and_stack(lframes = 2**21, time = 1, fs = 20000000, offset_in_seconds_from_injection = 10, kick_time = None, file_ranges = None):
     nframes = int(fs*time/lframes)
     zz_sum  = np.zeros((nframes, lframes))
     
-    for injection_time in kick_time[:-1]: 
+    for injection_time in kick_time: 
         nframes = int(fs*time/lframes)
         file_with_injection = find_key_in_range(file_ranges, injection_time)
         print(f'Analysing the injection found at: {file_with_injection}')
         iq = get_iq_object(file_with_injection)
         iq.method = 'fft'
-        offset = int((injection_time + offset_from_injection - file_ranges[file_with_injection][0]) / np.timedelta64(1,'s') * fs)
+        offset = int((injection_time + offset_in_seconds_from_injection - file_ranges[file_with_injection][0]) / np.timedelta64(1,'s') * fs)
         
         try:
             iq.read_samples(nframes*lframes, offset = offset)
