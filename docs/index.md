@@ -1,12 +1,12 @@
-# TDMSchopper Script Documentation
+# TDMchopS Script Documentation
 
-This documentation provides an overview of the TDMSchopper script functionality.
+This documentation provides an overview of the TDMchopS script functionality.
 
-The TDMSchopper script processes input arguments from the command line to specify the duration of the analysis, the starting point of the analysis, and the number of frequency bins. It then calls the `controller()` function, which coordinates the chopping and stacking process. The `controller()` function uses methods from the `TDMSchopper.model` module to retrieve necessary data files, analyze the data, and save the chopped and stacked data in a NumPy file called `zz_cutted_and_stacked.npz`.
+The TDMchopS script processes input arguments from the command line to specify the duration of the analysis, the starting point of the analysis, and the number of frequency bins. It then calls the `controller()` function, which coordinates the chopping and stacking process. The `controller()` function uses methods from the `tdmchops.model` module to retrieve necessary data files, analyze the data, and save the chopped and stacked data in a NumPy file called `zz_cutted_and_stacked.npz`.
 
 ## main()
 
-Main entry point of the TDMSchopper script.
+Main entry point of the tdmchops script.
 
 This function parses command-line arguments, performs the chopping and stacking of data, and saves the result in a NumPy file.
 
