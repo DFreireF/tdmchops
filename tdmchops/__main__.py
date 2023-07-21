@@ -1,11 +1,11 @@
 import numpy as np
 import argparse
 
-from TDMSchopper.TDMSchopper.model import get_iq_files, get_sc_files, get_absolute_time_file_ranges, get_kick_time, chop_and_stack
+from tdmchops.tdmchops.model import get_iq_files, get_sc_files, get_absolute_time_file_ranges, get_kick_time, chop_and_stack
 
 def main():
     """
-    Main entry point of the TDMSchopper script.
+    Main entry point of the TDMchopS script.
 
     This function parses command-line arguments, performs the chopping and stacking of data,
     and saves the result in a NumPy file.
