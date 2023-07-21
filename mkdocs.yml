@@ -1,9 +1,9 @@
-site_name: TDMSchopper Documentation
-site_description: "TDMSchopper: Collection of code that chops in time NTCAP data in order to perform mass-and lifetime measurements of ringed ions in a frequency broadband."
-site_url: "https://DFreireF.github.io/TDMSchopper"
-repo_url: "https://github.com/DFreireF/TDMSchopper"
+site_name: TDMchopS Documentation
+site_description: "TDMchopS: Collection of code that chops in time chunks of NTCAP (iq.tdms) data in order to perform mass-and lifetime measurements of ringed ions in a frequency broadband."
+site_url: "https://DFreireF.github.io/tdmchops"
+repo_url: "https://github.com/DFreireF/tdmchops"
 edit_uri: "blob/main/docs/"
-repo_name: "DFreireF/TDMSchopper"
+repo_name: "DFreireF/tdmchops"
 site_dir: "site"
 watch: [README.md]
 
