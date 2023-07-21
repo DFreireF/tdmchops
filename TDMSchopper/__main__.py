@@ -4,7 +4,23 @@ import argparse
 from TDMSchopper.TDMSchopper.model import get_iq_files, get_sc_files, get_absolute_time_file_ranges, get_kick_time, chop_and_stack
 
 def main():
-    
+    """
+    Main entry point of the TDMSchopper script.
+
+    This function parses command-line arguments, performs the chopping and stacking of data,
+    and saves the result in a NumPy file.
+
+    Command-line Arguments:
+    -t, --time : float, optional (default=1)
+        The duration in seconds of data to analyze, starting from an offset in time (skip).
+    -s, --skip : float, optional (default=10)
+        The starting point in time of the analysis, measured in seconds from the injection time.
+    -b, --binning : int, optional (default=2**21)
+        The number of frequency bins (lframes) used during the analysis.
+
+    Returns:
+    None
+    """
     scriptname = 'TDMSchopper' 
     parser = argparse.ArgumentParser()
 
@@ -18,6 +34,23 @@ def main():
     controller(int(args.binning), args.time, args.skip)
     
 def controller(lframes, time, skip):
+    """
+    Controller function responsible for orchestrating the data chopping and stacking process.
+
+    This function retrieves relevant data files, analyzes data based on provided time and skip parameters,
+    and saves the resulting chopped and stacked data in a NumPy file.
+
+    Parameters:
+    lframes : int
+        Number of frequency bins (lframes) used during the analysis.
+    time : float
+        The duration in seconds of data to analyze, starting from an offset in time (skip).
+    skip : float
+        The starting point in time of the analysis, measured in seconds from the injection time.
+
+    Returns:
+    None
+    """
     #Get the files containing the scalar and iq signal information recorded by the NTCAP
     sc_files = get_sc_files()
     iq_files = get_iq_files()
