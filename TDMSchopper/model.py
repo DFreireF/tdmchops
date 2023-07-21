@@ -89,7 +89,6 @@ def get_sc_files(head = '/lustre/ap/litv-exp/2021-07-03_E143_TwoPhotonDecay_ssan
         filelist = f.read().split('\n')
     sc_files = [head + f for f in filelist]
     return sc_files
-    
 
 def get_iq_files(head = '/lustre/ap/litv-exp/2021-07-03_E143_TwoPhotonDecay_ssanjari/ntcap/iq/IQ_2021-06-30_23-27-34_part3/'):
     with open(head + 'iq_list.txt', encoding='latin1') as f:
@@ -106,6 +105,7 @@ def get_absolute_time_file_ranges(iq_files):
     initial_timestamps = initial_final_timestamps[:,0]
     final_timestamps = initial_final_timestamps[:,1]
     file_ranges = create_dictionary(iq_files, initial_timestamps, final_timestamps)
+    return file_ranges
 
 def chop_and_stack(lframes = 2**21, time = 1, fs = 20000000, offset_in_seconds_from_injection = 10, kick_time, file_ranges):
     nframes = int(fs*time/lframes)
