@@ -1,2 +1,2 @@
-# tdms_chopper
+# TDMSchopper
 Chops the iq.TDMS files
