@@ -1,6 +1,6 @@
 # model.py Documentation
 
-This documentation provides an overview of the functions implemented in the `model.py` module of the TDMSchopper project.
+This documentation provides an overview of the functions implemented in the `model.py` module of the `tdmchops` project.
 
 ## analyserfile2datetime64(file)
 
