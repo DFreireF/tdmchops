@@ -1,7 +1,7 @@
 import numpy as np
 import argparse
 
-from tdmchops.tdmchops.model import get_iq_files, get_sc_files, get_absolute_time_file_ranges, get_kick_time, chop_and_stack
+from .model import get_iq_files, get_sc_files, get_absolute_time_file_ranges, get_kick_time, chop_and_stack
 
 def main():
     """

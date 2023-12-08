@@ -4,7 +4,7 @@ import os
 import glob
 import matplotlib.dates as mdates
 from nptdms import TdmsFile
-from iqtools.iqtools.tools import get_iq_object
+from iqtools.tools import get_iq_object
 import gc
 
 def analyserfile2datetime64(file):
