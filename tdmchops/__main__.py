@@ -1,6 +1,6 @@
 import numpy as np
 import argparse
-
+import toml
 from .model import get_iq_files, get_sc_files, get_absolute_time_file_ranges, get_kick_time, chop_and_stack
 
 def main():
@@ -28,12 +28,12 @@ def main():
     parser.add_argument('-t', '--time', type = float, default = 1, help = 'For how long in time to analyse (from an introduced offset in time (skip)).')
     parser.add_argument('-s', '--skip', type = float, default = 10, help = 'Starting point in time of the analysis (from injection).')
     parser.add_argument('-b', '--binning', type = int, default = 2**21, help = 'Number of frecuency bins (lframes).')
-
+    parser.add_argument('--pathsettings', type=str, help='Path to the TOML configuration file')
     args = parser.parse_args()
 
-    controller(int(args.binning), args.time, args.skip)
+    controller(int(args.binning), args.time, args.skip, args.pathsettings)
     
-def controller(lframes, time, skip):
+def controller(lframes, time, skip, pathsettings):
     """
     Controller function responsible for orchestrating the data chopping and stacking process.
 
@@ -51,9 +51,19 @@ def controller(lframes, time, skip):
     Returns:
     None
     """
+    if pathsettings:
+        config = load_config(pathsettings)
+
+        if config:
+            # Use the values from the config
+            get_sc_files_head = config.get('get_sc_files_head', '')
+            get_iq_files_head = config.get('get_iq_files_head', '')
+
+    else:
+        print("Error: Please provide a path to the TOML configuration file using --pathsettings.")
     #Get the files containing the scalar and iq signal information recorded by the NTCAP
-    sc_files = get_sc_files()
-    iq_files = get_iq_files()
+    sc_files = get_sc_files(get_sc_files_head)
+    iq_files = get_iq_files(get_iq_files_head)
     #Get the kicker time, corrected to injection time by correcting the time with a reference
     kick_time = get_kick_time(sc_files)
     #Get from where in absolute time to where it finish every iq file and created a dictionary for every file (key) with the two time values (start, finish)
@@ -63,6 +73,15 @@ def controller(lframes, time, skip):
     zz_cutted_and_stacked = chop_and_stack(lframes = lframes, time = time, fs = 20000000, offset_in_seconds_from_injection = skip, kick_time = kick_time, file_ranges = file_ranges)
     #save the chopped and stacked zz_sum of every injection time
     np.savez('zz_cutted_and_stacked', zz = zz_cutted_and_stacked)
+
+def load_config(config_path):
+    try:
+        with open(config_path, 'r') as config_file:
+            config = toml.load(config_file)
+        return config
+    except FileNotFoundError:
+        print(f"Error: Config file '{config_path}' not found.")
+        return None
 
 if __name__ == '__main__':
     main()

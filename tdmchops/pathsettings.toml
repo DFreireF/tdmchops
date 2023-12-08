@@ -1,0 +1,2 @@
+get_sc_files_head = 'path/to/sc/files'
+get_iq_files_head = 'path/to/iq/files'
