@@ -7,6 +7,7 @@ from nptdms import TdmsFile
 from iqtools.tools import get_iq_object
 import gc
 
+
 def analyserfile2datetime64(file):
     """
     Convert an analyser file name to a numpy.datetime64 object.
@@ -228,12 +229,12 @@ def initial_final_timestamps(file, reference = np.datetime64('2021-06-30T23:27:3
     final_timestamp = factor + np.timedelta64(int(timestamps[-1]*1e9), 'ns')
     return initial_timestamp, final_timestamp
 
-def get_sc_files(head = '/lustre/ap/litv-exp/2021-07-03_E143_TwoPhotonDecay_ssanjari/ntcap/sc/SC_2021-06-30_23-27-45/'):
+def get_sc_files(head):
     """
     Get a list of SC files.
 
     Parameters:
-    head : str, optional (default='/lustre/ap/litv-exp/2021-07-03_E143_TwoPhotonDecay_ssanjari/ntcap/sc/SC_2021-06-30_23-27-45/')
+    head : str
         The directory containing the SC files.
 
     Returns:
@@ -245,12 +246,12 @@ def get_sc_files(head = '/lustre/ap/litv-exp/2021-07-03_E143_TwoPhotonDecay_ssan
     sc_files = [head + f for f in filelist]
     return sc_files
 
-def get_iq_files(head = '/lustre/ap/litv-exp/2021-07-03_E143_TwoPhotonDecay_ssanjari/ntcap/iq/IQ_2021-06-30_23-27-34_part3/'):
+def get_iq_files(head):
     """
     Get a list of IQ files.
 
     Parameters:
-    head : str, optional (default='/lustre/ap/litv-exp/2021-07-03_E143_TwoPhotonDecay_ssanjari/ntcap/iq/IQ_2021-06-30_23-27-34_part3/')
+    head : str
         The directory containing the IQ files.
 
     Returns:
